@@ -4,6 +4,7 @@ const https = require("https");
 const WebSocket = require("ws");
 const { v4: uuidv4 } = require("uuid");
 const path = require("path");
+const { makeChannelsHandler } = require("./channels");
 
 const app = express();
 const server = https.createServer(
@@ -45,6 +46,16 @@ app.get("/terms.html", (req, res) => {
 app.get("/privacy.html", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/privacy.html"));
 });
+
+// Route to get the list of channels securely
+app.get(
+  "/channels",
+  makeChannelsHandler({
+    rooms,
+    roomNames,
+    getKey: () => process.env.CHANNELS_KEY,
+  })
+);
 
 const keepAliveInterval = 30000; // 30 seconds
 

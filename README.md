@@ -74,6 +74,12 @@ server {
 sudo systemctl restart nginx
 ```
 
+## Environment variables
+
+### `CHANNELS_KEY`
+
+Optional. When set, `GET /channels?key=<value>` returns a JSON list of active rooms (`roomId`, `roomName`, `numMembers`, `url`). When unset or empty, `/channels` responds 404; a wrong or missing key responds 403. Copy `.env.example` to `.env` (gitignored) and set a value locally, or set it in the production environment. Never commit a real value.
+
 ## Usage
 Access the application:
 Open your browser and go to http://yourdomain.com

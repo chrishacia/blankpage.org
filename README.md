@@ -1,5 +1,7 @@
 # Collaborative Code Review Tool
 
+The production site is indexable: see `public/robots.txt` (Allow + sitemap) and `public/sitemap.xml` (`https://blankpage.org/sitemap.xml`).
+
 ## Description
 A real-time collaborative code review tool with room-based text editing, syntax highlighting, and secure ephemeral sessions. Easily create, join, and manage rooms with custom names and live cursor tracking.
 

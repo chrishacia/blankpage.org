@@ -1,7 +1,7 @@
-# Handoff — idx-blankpage-r1
+# Handoff — bp-channels-r1
 
-- Goal/issue: Issue #1 — make blankpage.org indexable: add `public/robots.txt` (Allow + Sitemap) and `public/sitemap.xml` for `/`, `/privacy.html`, `/terms.html` (no room URLs).
-- Done: created both files; README line added; `npm ci` OK; served on port 3545 and curled (robots 200 text/plain with Allow + Sitemap, sitemap 200 application/xml valid, `/` 200); `report.md` written.
+- Goal/issue: Issue #4 — commit prod `/channels` route with env-read key (`CHANNELS_KEY`, fail-closed 404 unset, 403 wrong/missing via timingSafeEqual), README + `.env.example`, minimal node:test.
+- Done: `server/channels.js` (`makeChannelsHandler({rooms, roomNames, getKey})`), wired in `server/server.js` after `/privacy.html`, README section, `.env.example` (empty), `.env` gitignored, `server/channels.test.js`, `test` script. Verified below.
 - Left: commit only (wrapper pushes/opens draft PR).
 - Next step: commit, then let wrapper push/open draft PR.
-- Resume: branch `feat/1-indexable`, worktree `/workspace/muse-work/idx-blankpage`, brief `/workspace/fleet/coder-hooks/briefs/idx-blankpage-r1.md`, run `/workspace/muse-runs/idx-blankpage-r1`.
+- Resume: branch `feat/4-channels-route`, worktree `/workspace/muse-work/bp-channels`, brief `/workspace/fleet/coder-hooks/briefs/bp-channels-r1.md`, run `/workspace/muse-runs/bp-channels-r1`.

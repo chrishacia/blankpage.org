@@ -4,7 +4,8 @@
     "description": "A collaborative tool for web developers and software engineers.",
     "main": "server/server.js",
     "scripts": {
-        "start": "node server/server.js"
+        "start": "node server/server.js",
+        "test": "node --test"
     },
     "dependencies": {
         "express": "^4.17.1",

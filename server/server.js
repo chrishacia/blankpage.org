@@ -1,18 +1,40 @@
+const dotenv = require("dotenv");
+dotenv.config();
+
 const express = require("express");
 const fs = require("fs");
-const https = require("https");
+
+const SECRET_KEY = process.env.SECRET_KEY;
+
+let httpProtocol = null;
+if (process.env.SERVER_ENV === "development") {
+  httpProtocol = require("http");
+} else {
+  httpProtocol = require("https");
+}
 const WebSocket = require("ws");
 const { v4: uuidv4 } = require("uuid");
 const path = require("path");
 
 const app = express();
-const server = https.createServer(
-  {
-    cert: fs.readFileSync("/etc/letsencrypt/live/blankpage.org/fullchain.pem"),
-    key: fs.readFileSync("/etc/letsencrypt/live/blankpage.org/privkey.pem"),
-  },
-  app
-);
+
+let server = null;
+if (process.env.SERVER_ENV === "development") {
+  server = httpProtocol.createServer(app);
+} else {
+  server = httpProtocol.createServer(
+    {
+      cert: fs.readFileSync(
+        "/etc/letsencrypt/live/collab.coderlife.net/fullchain.pem"
+      ),
+      key: fs.readFileSync(
+        "/etc/letsencrypt/live/collab.coderlife.net/privkey.pem"
+      ),
+    },
+    app
+  );
+}
+
 const wss = new WebSocket.Server({ server });
 
 let rooms = {}; // Store active rooms and their members
@@ -44,6 +66,21 @@ app.get("/terms.html", (req, res) => {
 // Serve the privacy policy page
 app.get("/privacy.html", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/privacy.html"));
+});
+
+// Route to get the list of channels securely
+app.get("/channels", async (req, res) => {
+  const { key } = req.query;
+  if (key === SECRET_KEY) {
+    const channels = await Object.keys(rooms).map((roomId) => ({
+      roomId,
+      roomName: roomNames[roomId],
+      numMembers: rooms[roomId].length,
+    }));
+    res.json(channels);
+  } else {
+    res.status(403).send("Access denied");
+  }
 });
 
 const keepAliveInterval = 30000; // 30 seconds
